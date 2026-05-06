@@ -1,0 +1,17 @@
+{
+  "repo": "plume-trade-ledger-forge",
+  "thresholds": {
+    "signal": 3,
+    "slack": 2,
+    "confidence": 2,
+    "drag": 2,
+    "ship": 156,
+    "watch": 120
+  },
+  "terms": [
+    "spread pressure",
+    "fill risk",
+    "portfolio drift",
+    "quote width"
+  ]
+}
