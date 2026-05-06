@@ -1,0 +1,73 @@
+{
+  "repo": "plume-trade-ledger-forge",
+  "language": "Zig",
+  "category": "Trading systems",
+  "goal": "Design a Zig verification harness for ledger systems, covering diagnostic reporting, negative fixtures, and failure-oriented tests.",
+  "review_model": {
+    "terms": [
+      "spread pressure",
+      "fill risk",
+      "portfolio drift",
+      "quote width"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "spread pressure",
+      "signal": 70,
+      "slack": 32,
+      "drag": 29,
+      "confidence": 68,
+      "score": 153,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "fill risk",
+      "signal": 67,
+      "slack": 31,
+      "drag": 29,
+      "confidence": 63,
+      "score": 141,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "portfolio drift",
+      "signal": 69,
+      "slack": 44,
+      "drag": 12,
+      "confidence": 74,
+      "score": 220,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "quote width",
+      "signal": 82,
+      "slack": 49,
+      "drag": 22,
+      "confidence": 64,
+      "score": 211,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "spread pressure",
+      "signal": 71,
+      "slack": 21,
+      "drag": 26,
+      "confidence": 74,
+      "score": 159,
+      "lane": "ship"
+    }
+  ]
+}

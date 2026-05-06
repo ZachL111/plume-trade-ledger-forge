@@ -1,67 +1,40 @@
 # plume-trade-ledger-forge
 
-`plume-trade-ledger-forge` packages a practical trading systems exercise in Zig. The emphasis is on deterministic behavior, a small public API, and examples that explain the tradeoffs.
+`plume-trade-ledger-forge` keeps a focused Zig implementation around trading systems. The project goal is to design a Zig verification harness for ledger systems, covering diagnostic reporting, negative fixtures, and failure-oriented tests.
 
-## How I Read Plume Trade Ledger Forge
+## Purpose
 
-The useful thing to inspect here is how the same score rule is represented in code, metadata, and examples. If those three pieces disagree, the audit script should make the drift visible.
+I want this repository to be useful as a quick reading exercise: fixtures first, implementation second, verifier last.
 
-## Main Behaviors
+## Plume Trade Ledger Forge Review Notes
 
-- Includes extended examples for fills, including `recovery` and `degraded`.
-- Documents portfolio pressure tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
-- Adds a repository audit script that checks structure before running the language verifier.
+`edge` and `stress` are the cases worth reading first. They show the optimistic and cautious ends of the fixture.
 
-## Problem Shape
+## What Is Covered
 
-I use this kind of project to make a rule visible before adding more machinery around it. The important part here is not the size of the codebase. It is that the input signals, scoring rule, fixture data, and expected output can all be checked in one sitting.
+- `fixtures/domain_review.csv` adds cases for spread pressure and fill risk.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/plume-trade-ledger-walkthrough.md` walks through the case spread.
+- The Zig code includes a review path for `portfolio drift` and `fill risk`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Repository Map
+## Implementation Notes
 
-- `src`: primary implementation
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
+The repository has two validation layers: the original compact policy fixture and the domain review fixture. They are separate so one can change without hiding failures in the other.
 
-## Internal Model
+The added Zig path is deliberately direct, with fixtures doing most of the explaining.
 
-The project is organized around a compact model rather than a large framework. Inputs are scored, classified, and checked against golden fixtures. The constants live in code and are mirrored in metadata so documentation drift is easy to catch. The Zig version uses compile-time constants and native test blocks for fast local checks.
-
-## How To Run It
+## Command
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Audit Path
 
-## Scenario Walkthrough
+The same command runs the local verification path. The highest-scoring domain case is `edge` at 220, which lands in `ship`. The most cautious case is `stress` at 141, which lands in `ship`.
 
-The examples are meant to be readable before they are exhaustive. They cover enough variation to show how latency and risk can pull a decision below the threshold.
+## Limits
 
-## Validation
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
-
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Known Edges
-
-This code is local-first. It makes no claim about deployed usage and avoids credentials, hosted state, and environment-specific setup.
-
-## Follow-Up Work
-
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add one more trading systems fixture that focuses on a malformed or borderline input.
-
-## Run It Locally
-
-The only required setup is the local Zig toolchain. After cloning, stay in the repo root so fixture paths resolve correctly.
+This remains a local project with deterministic fixtures. It does not depend on credentials, hosted services, or live data. Future work should add richer malformed inputs before widening the public API.
